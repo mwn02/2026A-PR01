@@ -40,12 +40,12 @@ def create_platform(x, y, platform_type="green"):
     platform = {
         "x": float(x),
         "y": float(y),
-        "type": "green",                    # TODO
-        "image": platform_images["green"],  # TODO
-        "vx": 0.0,                          # TODO
+        "type": platform_type,                    # TODO
+        "image": platform_images[platform_type],  # TODO
+        "vx": MOVING_PLATFORM_SPEED if platform_type == "blue" else 0, # TODO
         "active": True,
         "width": PLATFORM_SIZE[0],
-        "height": PLATFORM_SIZE[1]           # TODO
+        "height": PLATFORM_SIZE[1] + 10 if platform_type == "spring" else PLATFORM_SIZE[1] # TODO
     }
 
     # TODO : Modifiez le dictionnaire ci-dessus pour qu'il dépende réellement
@@ -78,8 +78,14 @@ def choose_platform_type(green_probability, blue_probability, spring_probability
     #
     # Attention : les seuils utilisés avec random.random() doivent être
     # cumulatifs.
+    probabilities = {"green": green_probability, "blue": blue_probability, "spring": spring_probability}
+    rand_num = random.random()
+    current_number = 0
+    for plateform_type, value in probabilities.items():
+        current_number += value
+        if rand_num < current_number:
+            return plateform_type
 
-    return "green"  # Valeur temporaire à remplacer
-
+    return "brown"
 # ===========================================================
 
