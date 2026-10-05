@@ -173,7 +173,38 @@ def generate_new_platforms():
     # Vous devrez partir de la plateforme actuellement la plus haute et
     # continuer à ajouter des plateformes tant que nécessaire. Utilisez
     # choose_platform_type(...) avec les probabilités indiquées dans le README.
+    
+    y_plus_haut = SCREEN_HEIGHT
 
+    for platforme in PLATFORMS:
+        # verifie si la plateforme est visuellement plus haute que les precedentes 
+        if platforme["y"] < y_plus_haut:
+            # definit la nouvelle plateforme la plus haute
+            y_plus_haut = platforme["y"]
+    
+    # itere jusqu'a ce qu'on atteigne le haut de l'ecran
+    while y_plus_haut > 0:
+        # definir les parametres pour les nouvelles plateformes
+        apparition_y = y_plus_haut - random.randint(
+            MIN_PLATFORM_GAP,
+            MAX_PLATFORM_GAP
+        )
+        apparition_x = random.randint(
+            0,
+            SCREEN_WIDTH - PLATFORM_WIDTH
+        )
+        type_platforme = choose_platform_type(
+            0.55,
+            0.20,
+            0.13
+        )
+        nouvelle_platforme = create_platform(
+            apparition_x,
+            apparition_y,
+            type_platforme
+        )
+        PLATFORMS.append(nouvelle_platforme)
+        y_plus_haut = apparition_y
     return
 
 # ===========================================================
