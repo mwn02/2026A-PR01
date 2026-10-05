@@ -80,11 +80,11 @@ def choose_platform_type(green_probability, blue_probability, spring_probability
     # cumulatifs.
     probabilities = {"green": green_probability, "blue": blue_probability, "spring": spring_probability}
     rand_num = random.random()
-    current_number = 0
-    for plateform_type, value in probabilities.items():
-        current_number += value
-        if rand_num < current_number:
-            return plateform_type
+    probability_interval = 0
+    for platform_type, probability in probabilities.items():
+        probability_interval += probability
+        if rand_num < probability_interval:
+            return platform_type
 
     return "brown"
 # ===========================================================
