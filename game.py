@@ -130,7 +130,32 @@ def scroll_camera():
     # Le score doit représenter la distance verticale ainsi parcourue et le
     # meilleur score doit être mis à jour. Les plateformes sorties sous
     # l'écran doivent être retirées, puis de nouvelles plateformes générées.
+    if doodle_dict["y"] < CAMERA_SCROLL_THRESHOLD:
+        distance = CAMERA_SCROLL_THRESHOLD - doodle_dict["y"]
 
+        for platforme in PLATFORMS:
+            platforme["y"] += distance # bouger les plateformes vers le bas
+        doodle_dict["y"] = CAMERA_SCROLL_THRESHOLD # garder doodle à la hauteur du camera THRESHOLD
+        
+        # score
+        doodle_dict["score"] += distance
+        if doodle_dict["score"] > doodle_dict["high_score"]:
+            doodle_dict["high_score"] = doodle_dict["score"]
+
+        # visibilité des plateformes
+        plateformes_visibles = []
+        for platforme in PLATFORMS:
+            if platforme["y"] <= SCREEN_HEIGHT:
+                # la plateforme est visuellement plus haute que le bas de l'écran
+                # donc ajoute la plateforme encore visible à la liste temporaire
+                plateformes_visibles.append(platforme)
+        PLATFORMS.clear()
+        # supprime les plateformes qui ne sont plus visible en bas de l'écran
+
+        # reajouter les plateformes visibles à la liste principale de plateformes
+        for platforme in plateformes_visibles:
+            PLATFORMS.append(platforme)
+        generate_new_platforms()
     return
 
 # ===========================================================
@@ -148,7 +173,38 @@ def generate_new_platforms():
     # Vous devrez partir de la plateforme actuellement la plus haute et
     # continuer à ajouter des plateformes tant que nécessaire. Utilisez
     # choose_platform_type(...) avec les probabilités indiquées dans le README.
+    
+    y_plus_haut = SCREEN_HEIGHT
 
+    for platforme in PLATFORMS:
+        # verifie si la plateforme est visuellement plus haute que les precedentes 
+        if platforme["y"] < y_plus_haut:
+            # definit la nouvelle plateforme la plus haute
+            y_plus_haut = platforme["y"]
+    
+    # itere jusqu'a ce qu'on atteigne le haut de l'ecran
+    while y_plus_haut > 0:
+        # definir les parametres pour les nouvelles plateformes
+        apparition_y = y_plus_haut - random.randint(
+            MIN_PLATFORM_GAP,
+            MAX_PLATFORM_GAP
+        )
+        apparition_x = random.randint(
+            0,
+            SCREEN_WIDTH - PLATFORM_WIDTH
+        )
+        type_platforme = choose_platform_type(
+            0.55,
+            0.20,
+            0.13
+        )
+        nouvelle_platforme = create_platform(
+            apparition_x,
+            apparition_y,
+            type_platforme
+        )
+        PLATFORMS.append(nouvelle_platforme)
+        y_plus_haut = apparition_y
     return
 
 # ===========================================================
