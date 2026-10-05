@@ -82,7 +82,8 @@ def choose_platform_type(green_probability, blue_probability, spring_probability
     rand_num = random.random()
     probability_interval = 0
     for platform_type, probability in probabilities.items():
-        probability_interval += probability
+        probability_interval += probability # changer l'interval de probabilités à celui de la plateforme actuelle
+        # vérifier si le rand_num est situé dans l'interval de probabilités de la plateforme actuelle
         if rand_num < probability_interval:
             return platform_type
 
