@@ -38,7 +38,7 @@ def move_doodle():
 
     # TODO : Gérez les déplacements gauche/droite et mettez à jour
     # simultanément la direction et l'image du Doodle.
-    direction = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
+    direction = int(keys[pygame.K_d] or keys[pygame.K_RIGHT]) - int(keys[pygame.K_a] or keys[pygame.K_LEFT])
     doodle_dict["x"] += DOODLE_SPEED * direction
     if direction > 0:
         doodle_dict["direction"] = "right"
