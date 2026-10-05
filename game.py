@@ -102,7 +102,16 @@ def check_platform_collisions():
     # - spring : SPRING_JUMP_VELOCITY ;
     # - brown : JUMP_VELOCITY puis désactivation de la plateforme ;
     # - green/blue : JUMP_VELOCITY.
-
+    if doodle_dict["vel_y"] > 0:
+        for platforme in PLATFORMS:
+            if platforme["active"]:
+                if rects_collide([doodle_dict["x"], doodle_dict["y"], DOODLE_WIDTH, DOODLE_HEIGHT], [platforme["x"], platforme['y'], platforme["width"], platforme["height"]]):
+                    if platforme["type"] == "spring":
+                        doodle_dict["vel_y"] = SPRING_JUMP_VELOCITY
+                    else:
+                        doodle_dict["vel_y"] = JUMP_VELOCITY
+                        if platforme["type"] == "brown":
+                            platforme["active"] = False
     return
 
 # ===========================================================
